@@ -52,7 +52,7 @@ train_dataset = LeafDataset(df=train, image_dir='G:\\Plant Pathology 2020\\image
 valid_dataset = LeafDataset(df=valid, image_dir='G:\\Plant Pathology 2020\\images', transform=valid_transform, smooth_factor=0)
 
 train_loader = utils.data.DataLoader(train_dataset, batch_size=8, shuffle=True)
-valid_loader = utils.data.DataLoader(valid_dataset, batch_size=8, shuffle=True)
+valid_loader = utils.data.DataLoader(valid_dataset, batch_size=8, shuffle=False)
 
 model = models.resnet50(pretrained=True)
 model.fc = nn.Linear(model.fc.in_features, num_classes)
