@@ -1,0 +1,3 @@
+- Use Class-Balanced Focal Loss
+- Use more advanced techniques to augment data
+- Use a deeper model
