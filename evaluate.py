@@ -20,7 +20,7 @@ train, valid = model_selection.train_test_split(train, stratify=train.labels, te
 
 model = models.resnet50(pretrained=False)
 model.fc = nn.Linear(model.fc.in_features, len(class_names))
-model.load_state_dict(torch.load('model.pth'))
+model.load_state_dict(torch.load('resnet50.pth'))
 model = model.to(device)
 model.eval()
 
@@ -35,7 +35,7 @@ train_predictions = []
 valid_predictions = []
 
 for name, label in tqdm.tqdm(zip(train.image_id.values, train.labels.values), total=len(train)):
-    image_path = 'G:\\Plant Pathology 2020\\images' + '\\' + name + '.jpg'
+    image_path = 'images' + '\\' + name + '.jpg'
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = transform(image=image)['image']
@@ -47,7 +47,7 @@ for name, label in tqdm.tqdm(zip(train.image_id.values, train.labels.values), to
     pred = class_names[pred[0]]
     train_predictions.append(pred)
 for name, label in tqdm.tqdm(zip(valid.image_id.values, valid.labels.values), total=len(valid)):
-    image_path = 'G:\\Plant Pathology 2020\\images' + '\\' + name + '.jpg'
+    image_path = 'images' + '\\' + name + '.jpg'
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = transform(image=image)['image']
@@ -69,7 +69,7 @@ valid_confusion_matrix = metrics.confusion_matrix(valid.labels.values, valid_pre
 plot_confusion_matrix(train_confusion_matrix, class_names)
 plot_confusion_matrix(valid_confusion_matrix, class_names)
 
-with open('history.json', 'r') as f:
+with open('resnet50-history.json', 'r') as f:
     history = json.load(f)
 
 plot_lr_curve(history)

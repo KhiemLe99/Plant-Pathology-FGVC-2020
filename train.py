@@ -139,9 +139,9 @@ for epoch in range(1, num_epochs + 1):
 
     if epoch_acc > best_acc:
         best_acc = epoch_acc
-        torch.save(model.state_dict(), 'model.pth')
+        torch.save(model.state_dict(), 'resnet50.pth')
 
-with open('history.json', 'w') as f:
+with open('resnet50-history.json', 'w') as f:
     json.dump(history, f)
 
 time_elapsed = time.time() - since

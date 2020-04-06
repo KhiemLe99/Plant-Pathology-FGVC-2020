@@ -16,7 +16,7 @@ num_classes = len(class_names)
 
 model = models.resnet50(pretrained=False)
 model.fc = nn.Linear(model.fc.in_features, num_classes)
-model.load_state_dict(torch.load('model.pth'))
+model.load_state_dict(torch.load('resnet50.pth'))
 model = model.to(device)
 model.eval()
 
