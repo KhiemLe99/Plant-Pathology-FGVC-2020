@@ -8,7 +8,7 @@ import albumentations
 import albumentations.pytorch as AT
 import torch
 import torch.nn as nn
-import torchvision.models as models
+import pretrainedmodels
 from plots import *
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -18,9 +18,9 @@ class_names = list(train['labels'].value_counts().sort_index().index)
 
 train, valid = model_selection.train_test_split(train, stratify=train.labels, test_size=0.1, random_state=2020)
 
-model = models.resnet50(pretrained=False)
-model.fc = nn.Linear(model.fc.in_features, len(class_names))
-model.load_state_dict(torch.load('resnet50.pth'))
+model = pretrainedmodels.__dict__['se_resnet50'](num_classes=1000)
+model.last_linear = nn.Linear(model.last_linear.in_features, len(class_names))
+model.load_state_dict(torch.load('se_resnet50.pth'))
 model = model.to(device)
 model.eval()
 
@@ -69,7 +69,7 @@ valid_confusion_matrix = metrics.confusion_matrix(valid.labels.values, valid_pre
 plot_confusion_matrix(train_confusion_matrix, class_names)
 plot_confusion_matrix(valid_confusion_matrix, class_names)
 
-with open('resnet50-history.json', 'r') as f:
+with open('se_resnet50-history.json', 'r') as f:
     history = json.load(f)
 
 plot_lr_curve(history)

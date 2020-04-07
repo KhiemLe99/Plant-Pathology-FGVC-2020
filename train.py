@@ -12,7 +12,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import torch.utils as utils
-import torchvision.models as models
+import pretrainedmodels
 from data import LeafDataset
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -34,7 +34,7 @@ print()
 train_transform = albumentations.Compose([
     albumentations.Resize(256, 256),
     albumentations.CenterCrop(224, 224),
-    albumentations.HorizontalFlip(),
+    albumentations.HorizontalFlip(), albumentations.VerticalFlip(),
     albumentations.ShiftScaleRotate(shift_limit=0.0625, scale_limit=0.1, rotate_limit=15),
     albumentations.RandomBrightness(),
     albumentations.HueSaturationValue(),
@@ -48,14 +48,14 @@ valid_transform = albumentations.Compose([
     AT.ToTensor()
 ])
 
-train_dataset = LeafDataset(df=train, image_dir='G:\\Plant Pathology 2020\\images', transform=train_transform, smooth_factor=0)
-valid_dataset = LeafDataset(df=valid, image_dir='G:\\Plant Pathology 2020\\images', transform=valid_transform, smooth_factor=0)
+train_dataset = LeafDataset(df=train, image_dir='images', transform=train_transform, smooth_factor=0)
+valid_dataset = LeafDataset(df=valid, image_dir='images', transform=valid_transform, smooth_factor=0)
 
 train_loader = utils.data.DataLoader(train_dataset, batch_size=8, shuffle=True)
 valid_loader = utils.data.DataLoader(valid_dataset, batch_size=8, shuffle=False)
 
-model = models.resnet50(pretrained=True)
-model.fc = nn.Linear(model.fc.in_features, num_classes)
+model = pretrainedmodels.__dict__['se_resnet50'](num_classes=1000, pretrained='imagenet')
+model.last_linear = nn.Linear(model.last_linear.in_features, len(class_names))
 model = model.to(device)
 
 for p in model.parameters():
@@ -74,7 +74,7 @@ history = {
 best_acc = 0.0
 
 print("Start training ...\n" + "==================\n")
-num_epochs = 30
+num_epochs = 40
 for epoch in range(1, num_epochs + 1):
     head = 'epoch {:2}/{:2}'.format(epoch, num_epochs)
     print(head + '\n' + '-'*(len(head)))
@@ -139,9 +139,9 @@ for epoch in range(1, num_epochs + 1):
 
     if epoch_acc > best_acc:
         best_acc = epoch_acc
-        torch.save(model.state_dict(), 'resnet50.pth')
+        torch.save(model.state_dict(), 'se_resnet50.pth')
 
-with open('resnet50-history.json', 'w') as f:
+with open('se_resnet50-history.json', 'w') as f:
     json.dump(history, f)
 
 time_elapsed = time.time() - since

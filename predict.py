@@ -6,7 +6,7 @@ import albumentations.pytorch as AT
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torchvision.models as models
+import pretrainedmodels
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -14,9 +14,9 @@ train = pd.read_csv('train.csv')
 class_names = list(train['labels'].value_counts().sort_index().index)
 num_classes = len(class_names)
 
-model = models.resnet50(pretrained=False)
-model.fc = nn.Linear(model.fc.in_features, num_classes)
-model.load_state_dict(torch.load('resnet50.pth'))
+model = pretrainedmodels.__dict__['se_resnet50'](num_classes=1000)
+model.last_linear = nn.Linear(model.last_linear.in_features, len(class_names))
+model.load_state_dict(torch.load('se_resnet50.pth'))
 model = model.to(device)
 model.eval()
 
@@ -30,7 +30,7 @@ transform = albumentations.Compose([
 test = pd.read_csv('test.csv')
 result = []
 for name in tqdm.tqdm(test.image_id.values):
-    image_path = 'G:\\Plant Pathology 2020\\images' + '\\' + name + '.jpg'
+    image_path = 'images' + '\\' + name + '.jpg'
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     image = transform(image=image)['image']
@@ -43,4 +43,4 @@ for name in tqdm.tqdm(test.image_id.values):
     result.append([name] + prob)
 
 submission = pd.DataFrame(result, columns=['image_id'] + class_names) 
-submission.to_csv('submission.csv', index=False)
+submission.to_csv('se_resnet50-submission.csv', index=False)
