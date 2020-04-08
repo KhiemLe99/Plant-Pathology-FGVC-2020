@@ -43,9 +43,9 @@
 ||||
 |---|---|---|
 ||ResNet50|SE ResNet50|
-|Train Accuracy|99.88 %|99.63 %|
-|Valid Accuracy|96.17 %|97.81 %|
+|Train Accuracy|98.17 %|99.63 %|
+|Valid Accuracy|96.72 %|97.81 %|
 |Train Confusion Matrix|<img src='plots/resnet50/Train Confusion Matrix.png'>|<img src='plots/se_resnet50/Train Confusion Matrix.png'>|
 |Valid Confusion Matrix|<img src='plots/resnet50/Valid Confusion Matrix.png'>|<img src='plots/se_resnet50/Valid Confusion Matrix.png'>|
-|Public Score|0.943|0.947|
+|Public Score|0.942|0.947|
 |Private Score|||
