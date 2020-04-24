@@ -87,10 +87,9 @@ for epoch in range(1, num_epochs + 1):
 
         weights = (1.0 - 0.99) / np.array(1.0 - np.power(0.99, train_counts))
         weights = weights / np.sum(weights) * num_classes
-        weights = torch.tensor(weights)
+        weights = torch.tensor(weights).to(device)
         
         weights = weights.unsqueeze(0)
-        weights = weights.to(device)
         weights = weights.repeat(labels.shape[0], 1)
         weights = weights * labels
         weights = weights.sum(1)
