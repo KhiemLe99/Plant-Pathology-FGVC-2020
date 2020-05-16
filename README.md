@@ -1,6 +1,5 @@
-# **Plant Pathology 2020 - FGVC7**
-
-## **Competition Webside:** [Plant Pathology 2020 - FGVC7](https://www.kaggle.com/c/plant-pathology-2020-fgvc7)
+# **Plant Pathology CVPR 2020**
+This [competition](https://www.kaggle.com/c/plant-pathology-2020-fgvc7/overview/cvpr-2020) is part of the Fine-Grained Visual Categorization FGVC7 workshop at the Computer Vision and Pattern Recognition Conference CVPR 2020.
 
 ## **Dataset Overview:**
 |class|images|
